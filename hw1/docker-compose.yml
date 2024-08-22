@@ -29,14 +29,20 @@ services:
     volumes:
       - wordpress_data:/var/www/html
       - ./content:/var/www/html/wp-content
-    ports: 
-     - 9000:9000
     restart: always
     environment:
       WORDPRESS_DB_HOST: db
       WORDPRESS_DB_USER: wordpress_db_user
       WORDPRESS_DB_PASSWORD: wordpress_db_password
       WORDPRESS_DB_NAME: wordpress_local
+  node_exporter:
+    image: prom/node-exporter:v1.8.2
+    command:
+      - '--path.rootfs=/host'
+    pid: host
+    volumes:
+      - '/:/host:ro,rslave'
+    restart: unless-stopped
 volumes:
   db_data: {}
   wordpress_data: {}
