@@ -43,6 +43,26 @@ services:
     volumes:
       - '/:/host:ro,rslave'
     restart: unless-stopped
+  mysqld_exporter:
+    image: prom/mysqld-exporter
+    volumes:
+      - ./my.cnf:/.my.cnf:ro
+    restart: unless-stopped
+    depends_on:
+      - db
+  blackbox_exporter:
+    image: prom/blackbox-exporter:v0.25.0
+    volumes:
+      - ./blackbox.yml:/config/blackbox.yml:ro
+    depends_on:
+      - nginx
+  prometheus:
+    image: prom/prometheus:v2.53.2
+    volumes:
+      - promdata:/prometheus
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    restart: unless_stopped
 volumes:
   db_data: {}
   wordpress_data: {}
+  promdata: {}
