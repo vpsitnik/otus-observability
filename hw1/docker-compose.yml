@@ -7,9 +7,10 @@ services:
     volumes:
        - wordpress_data:/var/www/html
        - ./content:/var/www/html/wp-content
-       - ./nginx.conf:/etc/nginx/conf.d/wordpress.conf:ro
+       - ./nginx.conf:/etc/nginx/nginx.conf:ro
        - ./certs:/etc/nginx/certs:ro
     ports: 
+      - 80:80
       - 443:443
     restart: always
   db:
@@ -61,7 +62,7 @@ services:
     volumes:
       - promdata:/prometheus
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
-    restart: unless_stopped
+    restart: unless-stopped
 volumes:
   db_data: {}
   wordpress_data: {}
